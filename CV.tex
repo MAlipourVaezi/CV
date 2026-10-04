@@ -1,0 +1,1582 @@
+\documentclass[9pt,a4paper]{extarticle}
+
+\usepackage[
+    left=0.40in,
+    right=0.40in,
+    top=0.22in,
+    bottom=0.55in
+]{geometry}
+
+\usepackage{fontspec}
+\setmainfont{Tinos}
+
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{needspace}
+\usepackage{etoolbox}
+
+\hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 0}
+}
+
+\pagestyle{empty}
+\raggedbottom
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\tabcolsep}{0pt}
+
+\renewcommand{\arraystretch}{0.76}
+
+\emergencystretch=1em
+
+
+% ============================================================
+% COLORS
+% ============================================================
+
+\definecolor{CVAccent}{HTML}{00A287}
+\definecolor{CVBody}{HTML}{5D5D5D}
+\definecolor{CVDark}{HTML}{414141}
+\definecolor{CVText}{HTML}{333333}
+\definecolor{CVMuted}{HTML}{999999}
+
+
+% ============================================================
+% FONT SIZES
+% ============================================================
+
+\newcommand{\NameFont}
+    {\fontsize{18}{19.4}\selectfont}
+
+\newcommand{\SectionFont}
+    {\fontsize{12}{12.8}\selectfont}
+
+\newcommand{\CategoryFont}
+    {\fontsize{10}{10.6}\selectfont}
+
+\newcommand{\BodyFont}
+    {\fontsize{9}{9.55}\selectfont}
+
+\newcommand{\MetaFont}
+    {\fontsize{8}{8.5}\selectfont}
+
+\newcommand{\SubtitleFont}
+    {\fontsize{7.5}{8.0}\selectfont}
+
+\newcommand{\ContactFont}
+    {\fontsize{6.5}{7.0}\selectfont}
+
+
+\AtBeginDocument{
+    \BodyFont
+    \color{CVText}
+}
+
+
+% ============================================================
+% SPACING
+% ============================================================
+
+\newlength{\CVSectionBefore}
+\newlength{\CVSectionAfter}
+\newlength{\CVRowGap}
+\newlength{\CVMetaRowGap}
+\newlength{\CVRoleBefore}
+\newlength{\CVRoleAfter}
+\newlength{\CVEducationGap}
+
+
+\setlength{\CVSectionBefore}{3.2pt}
+\setlength{\CVSectionAfter}{0.35pt}
+
+\setlength{\CVRowGap}{-0.70pt}
+
+\setlength{\CVMetaRowGap}{-0.55pt}
+
+\setlength{\CVRoleBefore}{0.65pt}
+\setlength{\CVRoleAfter}{-0.10pt}
+
+\setlength{\CVEducationGap}{0.45pt}
+
+
+% ============================================================
+% SECTION
+% ============================================================
+
+\newcommand{\cvsection}[1]{%
+    \par
+    \vspace{\CVSectionBefore}%
+    \noindent
+    \hbox to \textwidth{%
+        {\SectionFont\bfseries\color{black}#1}%
+        \hspace{0.40em}%
+        \hrulefill
+    }%
+    \par
+    \vspace{\CVSectionAfter}%
+}
+
+
+% ============================================================
+% ROLE / CATEGORY
+% ============================================================
+
+\newcommand{\cvrole}[1]{%
+    \par
+    \vspace{\CVRoleBefore}%
+    {\CategoryFont\bfseries\color{CVDark}#1}%
+    \par
+    \vspace{\CVRoleAfter}%
+}
+
+
+\newcommand{\cvcategory}[1]{%
+    {\CategoryFont\bfseries\color{CVBody}#1}%
+}
+
+
+% ============================================================
+% GENERAL LEFT-RIGHT ROW
+% ============================================================
+
+\newcommand{\cvrow}[3]{%
+    \noindent
+    \begin{tabularx}
+        {\textwidth}
+        {@{\hspace{0.075in}}X
+         >{\raggedleft\arraybackslash}p{0.49\textwidth}@{}}
+
+        {\BodyFont\color{CVDark}#1}
+        &
+        {\MetaFont\itshape\color{CVBody}#2}%
+        \ifstrempty{#3}
+            {}
+            { {\BodyFont\itshape\color{CVAccent}#3}}
+
+    \end{tabularx}%
+    \par
+    \vspace{\CVRowGap}%
+}
+
+
+% ============================================================
+% EDUCATION
+% ============================================================
+
+\newcommand{\eduentry}[4]{%
+    \needspace{1.4\baselineskip}%
+
+    \noindent
+    \begin{tabularx}
+        {\textwidth}
+        {@{}p{0.52\textwidth}
+         >{\raggedleft\arraybackslash}X@{}}
+
+        {\CategoryFont\bfseries\color{CVDark}#1}
+        &
+        {\MetaFont\itshape\color{CVBody}#3}%
+        \ifstrempty{#2}
+            {}
+            {, {\BodyFont\itshape\color{CVAccent}#2}}%
+
+        \ifstrempty{#4}
+            {\\}
+            {\\[-1.1pt]
+             {\BodyFont\color{CVText}#4} & \\}
+
+    \end{tabularx}%
+    \par
+    \vspace{\CVEducationGap}%
+}
+
+
+% ============================================================
+% EXPERIENCE
+% ============================================================
+
+\newlength{\CVExperienceGap}
+\setlength{\CVExperienceGap}{-1pt}
+
+\newcommand{\experienceentry}[5]{%
+    \needspace{2.0\baselineskip}%
+
+    \noindent
+    \begin{tabularx}
+        {\textwidth}
+        {@{}p{0.36\textwidth}
+         >{\raggedleft\arraybackslash}X@{}}
+
+        {\CategoryFont\bfseries\color{CVDark}#1}
+        &
+        {\MetaFont\itshape\color{CVBody}#2}%
+        \ifstrempty{#3}
+            {}
+            {, {\BodyFont\itshape\color{CVAccent}#3}}%
+        \ifstrempty{#4}
+            {}
+            {, {\BodyFont\itshape\color{CVAccent}#4}}%
+
+    \end{tabularx}%
+
+    \ifstrempty{#5}
+        {}
+        {%
+            \par
+            \vspace{-1.0pt}
+            {\hspace{0.075in}\BodyFont\color{CVBody}#5}%
+        }%
+
+    \par
+    \vspace{\CVExperienceGap}%
+}
+
+
+% ============================================================
+% BULLET LISTS
+% ============================================================
+
+% Outer list:
+% used for broad categories such as Reinforcement Learning,
+% Causal Inference, Healthcare Decision-Making, etc.
+\newenvironment{cvcatlist}{%
+    \begin{itemize}[
+        leftmargin=0pt,
+        labelsep=0pt,
+        label={},
+        topsep=0pt,
+        itemsep=-0.5pt,
+        parsep=0pt,
+        partopsep=0pt
+    ]
+}{%
+    \end{itemize}
+}
+
+
+% Inner list:
+% deliberately compact to avoid unnecessary vertical gaps
+% between individual projects/publications.
+\newenvironment{cvsublist}{%
+    \begin{itemize}[
+        leftmargin=0.24in,
+        labelsep=0.07in,
+        label={\BodyFont\textbullet},
+        topsep=-0.8pt,
+        itemsep=-0.8pt,
+        parsep=0pt,
+        partopsep=0pt
+    ]
+}{%
+    \end{itemize}
+}
+
+% ============================================================
+% CONFERENCE PRESENTATIONS / INVITED TALKS
+% ============================================================
+
+\newenvironment{cvconflist}{%
+    \begin{itemize}[
+        leftmargin=0.24in,
+        labelsep=0.07in,
+        label={\BodyFont\textbullet},
+        topsep=-0.8pt,
+        itemsep=-0.8pt,
+        parsep=0pt,
+        partopsep=0pt
+    ]
+}{%
+    \end{itemize}
+}
+
+\newcommand{\confitem}[4]{%
+    \item\relax
+    {\BodyFont\color{CVBody}%
+     #1. #2, #3, #4.}%
+}
+
+
+\newcommand{\projectitem}[1]{%
+    \item\relax
+    {\BodyFont\color{CVBody}\ignorespaces#1\unskip}%
+}
+
+
+\newcommand{\pubitem}[1]{%
+    \item\relax
+    {\BodyFont\color{CVBody}\ignorespaces#1\unskip}%
+}
+
+
+% ============================================================
+% AWARDS / CERTIFICATIONS / CONFERENCES
+% ============================================================
+
+\newcommand{\awardrow}[3]{%
+    \noindent
+    \begin{tabularx}
+        {\textwidth}
+        {@{\hspace{0.075in}}X
+         >{\raggedleft\arraybackslash}p{0.49\textwidth}@{}}
+
+        {\BodyFont\color{CVDark}#1}
+        &
+        {\MetaFont\itshape\color{CVBody}#2}%
+        \ {\BodyFont\itshape\color{CVAccent}#3}
+
+    \end{tabularx}%
+    \par
+    \vspace{\CVMetaRowGap}%
+}
+
+
+% ============================================================
+% SKILLS
+% ============================================================
+
+\newcommand{\skillrow}[2]{%
+    {\BodyFont\color{CVText}
+     \textbf{#1}\ #2}%
+    \par
+    \vspace{-0.20pt}%
+}
+
+
+% ============================================================
+% SERVICE
+% ============================================================
+
+\newcommand{\servicerow}[3]{%
+    \noindent
+    \begin{tabularx}
+        {\textwidth}
+        {@{\hspace{0.075in}}X
+         >{\raggedleft\arraybackslash}p{0.49\textwidth}@{}}
+
+        {\BodyFont\color{CVBody}#1}
+        &
+        {\MetaFont\itshape\color{CVBody}#2}%
+        \ {\BodyFont\itshape\color{CVAccent}#3}
+
+    \end{tabularx}%
+    \par
+    \vspace{\CVMetaRowGap}%
+}
+
+
+% ============================================================
+% DOCUMENT
+% ============================================================
+
+\begin{document}
+
+
+% ============================================================
+% HEADER
+% ============================================================
+
+\begin{center}
+
+{\NameFont\bfseries\color{black}
+Mohammad Alipour-Vaezi}
+\par
+
+{\SubtitleFont\color{CVAccent}
+Ph.D. Candidate · Virginia Tech}
+\par
+
+\vspace{1.0pt}
+
+{\MetaFont\itshape\color{CVMuted}
+236 Durham Hall,
+Grado Department of Industrial and Systems Engineering,
+Blacksburg, VA 24061, USA}
+\par
+
+\vspace{1.2pt}
+
+{\ContactFont\color{CVText}
+
+(540) 605-0045
+\;|\;
+\href{mailto:Alipouraezi@vt.edu}
+{Alipouraezi@vt.edu}
+\;|\;
+\href
+{https://www.linkedin.com/in/mohammad-alipour-vaezi-777616193}
+{LinkedIn}
+\;|\;
+\href
+{https://scholar.google.com/citations?user=jN36PPYAAAAJ}
+{Google Scholar}
+\;|\;
+\href
+{https://sites.google.com/view/mohammad-alipour-vaezi/home?authuser=0}
+{Personal Website}
+
+}
+
+\end{center}
+
+\vspace{-1.5pt}
+
+
+% ============================================================
+% RESEARCH INTERESTS
+% ============================================================
+
+\cvsection{Research Interests}
+
+{\BodyFont\color{CVText}
+Reinforcement Learning,
+Data-Driven Optimization,
+Healthcare Decisions,
+Multi-Attribute Decision-Making.}
+\par
+
+
+% ============================================================
+% EDUCATION
+% ============================================================
+
+\cvsection{Education}
+
+
+\eduentry
+{Ph.D. in Industrial \& Systems Engineering-Operations Research}
+{Virginia Tech, VA, USA}
+{Spring 2023 - Spring 2027}
+{}
+% {Concentration: Operations Research}
+
+
+\eduentry
+{Graduate Certificate in Future Professoriate}
+{Virginia Tech, VA, USA}
+{Spring 2023 - Fall 2024}
+{}
+
+
+\eduentry
+{M.Sc. in Industrial Engineering-Systems Optimization}
+{University of Tehran, Tehran, Iran}
+{Fall 2019 - Spring 2021}
+{}
+
+
+\eduentry
+{B.Sc. in Industrial Engineering-Industrial Safety}
+{Shahid Beheshti University, Tehran, Iran}
+{Fall 2015 - Spring 2019}
+{}
+
+
+% ============================================================
+% ONGOING RESEARCH PROJECTS
+% ============================================================
+
+% \cvsection{Ongoing Research Projects}
+
+
+% \begin{cvcatlist}
+
+
+% \item \cvcategory{Reinforcement Learning}
+
+
+% \item \cvcategory{Healthcare Decision-Making}
+
+% \begin{cvsublist}
+
+% \projectitem{
+% \textbf{M. Alipour-Vaezi},
+% KL. Tsui,
+% H. Zhong.
+% Impact of Causal Machine Learning for Healthcare
+% and Personalized Medicine: A Systematic Review.
+% }
+
+% \projectitem{
+% \textbf{M. Alipour-Vaezi},
+% E. C. Gentry,
+% H. Zhong.
+% Comparative Risk of Autoimmune Diseases Development
+% in Patients with Precedent Contraceptive Use:
+% A Population-Based Observational Study.
+% }
+
+% \projectitem{
+% \textbf{M. Alipour-Vaezi},
+% S. Khodadadian,
+% R. S. McNamara,
+% K.L. Tsui,
+% H. Zhong.
+% Personalized Dosage Adjustment for Incretin-Based Therapies
+% Using a Learning Framework.
+% }
+
+% \end{cvsublist}
+
+
+% \item \cvcategory{Decision Support Systems}
+
+% \begin{cvsublist}
+
+% \projectitem{
+% \textbf{M. Alipour-Vaezi},
+% E. Büyüktahtakın.
+% Sustainability Quantification using Multi-Attribute Decision-Making
+% Techniques for Construction Portfolio Optimization Model:
+% The Effect of Linearization in Different Solution Methods.
+% (Under Review by International Journal of Construction Management)
+% }
+
+% \projectitem{
+% \textbf{M. Alipour-Vaezi},
+% H. Zhong,
+% KL. Tsui,
+% S. Khodadadian.
+% Logical Fallacies of Large Language Models
+% in the Decision-Making Process.
+% }
+
+% \projectitem{\textbf{M. Alipour-Vaezi}, H. Zhong, KL. Tsui, S. Khodadadian. When Simpler is Safer: Reliability of Traditional Machine Learning vs. Large Language Models in Clinical Predictions.
+% }
+
+% \projectitem{
+% TJ. Chen, \textbf{M. Alipour-Vaezi}, S.H. Huang, S. Khodadadian,
+% KL. Tsui.
+% Multi-Attribute Grid Search Cross-Validation:
+% a Novel Methodology for Simultaneous Parameter
+% and Threshold Tuning in Classification Problems.
+% }
+
+% \end{cvsublist}
+
+% \end{cvcatlist}
+
+
+% ============================================================
+% PUBLICATIONS
+% ============================================================
+
+\cvsection{Publications}
+
+
+\begin{cvcatlist}
+
+
+% ------------------------------------------------------------
+% Reinforcement Learning
+% ------------------------------------------------------------
+
+\item \cvcategory{Reinforcement Learning}
+
+\begin{cvsublist}
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+H. Zhong,
+S. Khodadadian.
+Risk-Sensitive Reinforcement Learning with Smoothed Quantile Objectives.
+(Under review by Operations Research)
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+H. Zhong,
+K.L. Tsui,
+S. Khodadadian
+(2026).
+Optimistic Reinforcement Learning with Quantile Objectives.
+In The 29th International Conference on Artificial Intelligence and Statistics.
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+S. Khodadadian.
+Deep Reinforcement Learning with Buffered Quantile Objectives.
+(Under review by ICLR)
+}
+
+\end{cvsublist}
+
+
+% ------------------------------------------------------------
+% Healthcare Decision-Making
+% ------------------------------------------------------------
+
+\item \cvcategory{Healthcare Decision-Making}
+
+\begin{cvsublist}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+T. Savla,
+M. R. Rukstalis,
+D. B. Rukstalis,
+KL. Tsui,
+D. B. Penzien,
+R. S. McNamara,
+H. Zhong
+(2026).
+Bidirectional associations between mental health conditions
+and cognitive impairment in patients with pain conditions
+of the back, neck, and spine:
+A population-based study.
+Plos one, 21(6), e0352339.
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+S. Khodadadian,
+R. S. McNamara,
+KL. Tsui,
+V. C. O'Brien,
+H. A. Ferris,
+H. Zhong.
+Glucagon-Like Peptide-1 Receptor Agonist Use and Multisystem Outcomes
+in Adults with Obesity by Diabetes Status.
+(Under Review by The Lancet Diabetes \& Endocrinology)
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+L. Alipour-Vaezi,
+R. S. McNamara,
+KL. Tsui,
+H. Zhong.
+Augmented Numeric Rating Scale (ANRS):
+A New Personalized Pain Measurement Technique
+Benefiting from Multi-Attribute Decision-Making Techniques. (Under review by Nature Scientific Reports)
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+A. Aghsami,
+F. Jolai
+(2022).
+Prioritizing and queueing the emergency departments’ patients
+using a novel data-driven decision-making methodology,
+a real case study.
+Expert Systems with Applications, 195, 116568.
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+K. Rezaie,
+R. Tavakkoli-Moghaddam
+(2023).
+Proposing a Novel Data-Driven Optimization Methodology
+to Calculate the Insurance Premium
+in the Iranian Health Insurance Industry.
+Emerging Markets Finance and Trade.
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+R. S. McNamara,
+M. R. Rukstalis,
+E. C. Gentry,
+D. B. Rukstalis,
+D. B. Penzien,
+K.L. Tsui,
+H. Zhong
+(2025).
+Comparative Risk of Developing Interstitial Cystitis
+With Childhood Gastrointestinal, Urological,
+Autoimmune, or Psychiatric Disorders.
+Neurourology and Urodynamics.
+}
+
+\pubitem{
+M. Rahiminia,
+S. Shahrabi Farahani,
+\textbf{M. Alipour-Vaezi},
+A. Aghsami,
+F. Jolai,
+A. Bozorhi-Amiri
+(2023).
+A novel data-driven patient and medical waste queuing system
+under pandemic:
+a real-world case.
+International Journal of Production Research.
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+R. Tavakkoli-Moghadaam,
+M. Samieinasab
+(2022).
+Scheduling the COVID-19 vaccine distribution
+based on data-driven decision-making methods.
+Journal of Industrial Engineering and Management Studies,
+8(2), 196-206.
+}
+
+\pubitem{
+\textbf{M. Alipour Vaezi},
+R. Tavakkoli-Moghaddam
+(2020).
+A new methodology for COVID-19 preparedness centers
+based on a location-allocation platform.
+Journal of Industrial and Systems Engineering,
+13(1), 35-41.
+}
+
+\pubitem{
+M. Dehghan-Bonari,
+\textbf{M. Alipour-Vaezi},
+A. Aghsami,
+M. Nasiri
+(2023).
+A diagnostic analytics model for managing post-disaster symptoms
+of depression and anxiety among students
+using a novel data-driven optimization approach.
+Healthcare Analytics.
+}
+
+\pubitem{
+M. Sheikhasadi,
+A. Hosseinpour,
+\textbf{M. Alipour-Vaezi},
+A. Aghsami,
+M. Rabbani
+(2024).
+Portfolio design for home healthcare devices production
+using a new data-driven optimization methodology.
+Soft Computing.
+}
+
+\pubitem{
+F. Ataei,
+E. Abdesabour,
+\textbf{M. Alipour Vaezi},
+M. Rabani
+(2025).
+Optimizing Patient Allocation for Mental Patients
+in Healthcare Facilities:
+A Performance Assessment Approach.
+Journal of Industrial and Systems Engineering.
+}
+
+\pubitem{
+N. Abdali,
+\textbf{M. Alipour-Vaezi},
+A. Aghsami,
+M. Rabbani
+(2024).
+A new data-driven decision-making method
+for therapist-patient allocation and scheduling.
+Journal of Industrial and Systems Engineering.
+}
+
+\end{cvsublist}
+
+
+% ------------------------------------------------------------
+% Post-Disaster and Humanitarian Supply Chain Management
+% ------------------------------------------------------------
+
+\item \cvcategory{Post-Disaster and Humanitarian Supply Chain Management}
+
+\begin{cvsublist}
+
+\pubitem{
+Z. Mohammadnazari,
+M. Mousapour Mamoudan,
+\textbf{M. Alipour-Vaezi},
+A. Aghsami,
+F. Jolai,
+M. Yazdani
+(2022).
+Prioritizing Post-Disaster Reconstruction Projects
+Using an Integrated Multi-Criteria Decision-Making Approach:
+A Case Study.
+Buildings, 12(2), 136.
+}
+
+\pubitem{
+M. Masoumi,
+A. Aghsami,
+\textbf{M. Alipour-Vaezi},
+F. Jolai,
+B. Esmailifar
+(2021).
+An M/M/C/K queueing system in an inventory routing problem
+considering congestion and response time
+for post-disaster humanitarian relief:
+a case study.
+Journal of Humanitarian Logistics and Supply Chain Management.
+}
+
+\pubitem{
+H. Shakibaei,
+M. R. Farhadi-Ramin,
+\textbf{M. Alipour-Vaezi},
+A. Aghsami,
+M. Rabbani
+(2024).
+Designing a post-disaster humanitarian supply chain
+using machine learning and multi-criteria decision-making techniques.
+Kybernetes.
+}
+
+\pubitem{
+Z. Mohammad Nazari,
+\textbf{M. Alipour-Vaezi},
+E. Hassannayebi
+(2023).
+Green inventory management in a multi-product,
+multi-vendor post-disaster construction supply chain.
+Environment, Development, and Sustainability.
+}
+
+\end{cvsublist}
+
+
+% ------------------------------------------------------------
+% Media, Entertainment, and Publishing Industries
+% ------------------------------------------------------------
+
+\item \cvcategory{Media, Entertainment, and Publishing Industries}
+
+\begin{cvsublist}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+K.L. Tsui
+(2024).
+Data-driven portfolio management for motion pictures industry:
+A new data-driven optimization methodology
+using a large language model as the expert,
+Computers \& Industrial Engineering,
+197, 110574
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+A. Aghsami,
+M. Rabbani
+(2022).
+Introducing a novel revenue-sharing contract
+in media supply chain management
+using data mining and multi-criteria decision-making methods.
+Soft Computing,
+26(6), 2883-2900.
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+R. Tavakkoli-Moghaddam,
+Z. Mohammadnazari
+(2022).
+Optimization of a television advertisement scheduling problem
+by multi-criteria decision-making and dispatching rules.
+Multimedia Tools and Applications,
+81(8), 11755-11772.
+}
+
+\pubitem{
+S. Dashtakian-Nasrabad,
+M. Esmaeili-Qeshlaqi,
+\textbf{M. Alipour-Vaezi},
+A. Aghsami,
+F. Jolai
+(2024).
+A bi-objective optimization mathematical Model integrated
+with a bulk-arrival Markovian Queueing System and Machine Learning
+in publishing industries.
+International Journal of Management Science
+and Engineering Management.
+}
+
+\end{cvsublist}
+
+
+% ------------------------------------------------------------
+% Supply Chain / Production / IE
+% ------------------------------------------------------------
+
+\item \cvcategory{
+Supply Chain, Production Scheduling,
+and Industrial Engineering (General Applications)
+}
+
+\begin{cvsublist}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi},
+E. Büyüktahtakın.
+Sustainability Quantification using Multi-Attribute Decision-Making
+Techniques for Construction Portfolio Optimization Model:
+The Effect of Linearization in Different Solution Methods.
+(Under Review by International Journal of Construction Management)
+}
+
+\pubitem{
+TJ. Chen, \textbf{M. Alipour-Vaezi}, S.H. Huang, S. Khodadadian,
+KL. Tsui.
+Multi-Attribute Grid Search Cross-Validation:
+a Novel Methodology for Simultaneous Parameter
+and Threshold Tuning in Classification Problems. (Under review by Expert Systems with Applications)
+}
+
+\pubitem{
+R. Yazdani,
+\textbf{M. Alipour-Vaezi},
+K. Kabirifar,
+A. Salahi Kojour,
+F. Soleimani
+(2022).
+A lion optimization algorithm for integrating maintenance planning
+and production scheduling problems
+with a total absolute deviation of completion time’s objective.
+Soft Computing.
+}
+
+\pubitem{
+R. Tavakkoli-Moghaddam,
+\textbf{M. Alipour-Vaezi},
+Z. Mohammad-Nazari
+(2020, August).
+A new application of coordination contracts
+for supplier selection in a cloud environment.
+In IFIP international conference
+on advances in production management systems
+(pp. 197-205).
+Springer, Cham.
+}
+
+\pubitem{
+Z. Mohammadnazari,
+R. Tavakkoli-Moghaddam,
+\textbf{M. Alipour-Vaezi}
+(2023).
+A new application of multi-criteria decision-making
+for the scheduling of flexible manufacturing systems.
+Scientia Iranica.
+}
+
+\pubitem{
+M. Basirati,
+E. Hassannayebi,
+Z. Mohammadnazari,
+\textbf{M. Alipour-Vaezi}
+(2023).
+Application of Multi-Criteria Decision-Making Methods
+for Human Resource’s Task Scheduling in Multi-Sided Platforms.
+In 6th European International Conference
+on Industrial Engineering and Operations Management.
+}
+
+\pubitem{
+N. Abdali,
+S. Heidari,
+\textbf{M. Alipour-Vaezi},
+F. Jolai,
+A. Aghsami
+(2024).
+A priority queueing-inventory approach
+for inventory management in multi-channel service retailing
+using machine learning algorithms.
+Kybernetes.
+}
+
+\pubitem{
+A. Khalili Fard,
+R. Tavakkoli-Moghaddam,
+N. Abdali,
+\textbf{M. Alipour-Vaezi},
+A. Bozorgi-Amiri
+(2024).
+A roommate problem and room allocation in dormitories
+using mathematical modeling
+and multi-attribute decision-making techniques.
+Journal of Modelling in Management.
+}
+
+\pubitem{
+M. Belghand,
+A. Asadi,
+\textbf{M. Alipour-Vaezi},
+F. Jolai,
+A. Aghsami
+(2024).
+A multiobjective mathematical model
+for a novel buy-back coordination contract
+in the symbiotic supply chain with fuzzy price:
+a data-driven decision approach.
+Journal of Modelling in Management.
+}
+
+\pubitem{
+A. Hosseinpour,
+R. Tavakkoli-Moghaddam,
+M. Mazloum,
+\&
+\textbf{M. Alipour-Vaezi}
+(2025).
+Addressing the layout problem for an open workspace
+based on staff relationships and interactions:
+decision-making and meta-heuristic methods.
+INFOR:
+Information Systems and Operational Research.
+}
+
+\end{cvsublist}
+
+\end{cvcatlist}
+
+% ============================================================
+% PATENTS
+% ============================================================
+
+\cvsection{Patents}
+
+\begin{cvsublist}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi}, P. Kashyap, A. Kalyanpur.
+Risk-Aware Memory Management for Language Model Agents Using Task-Adaptive Quantile Utility.
+The United States Patent and Trademark Office,
+Ongoing.
+}
+
+\pubitem{
+\textbf{M. Alipour-Vaezi}.
+Automatic Guitar Tuner.
+Iran's National Registration Organization,
+2013.
+}
+
+\end{cvsublist}
+
+
+% ============================================================
+% HONORS & AWARDS
+% ============================================================
+
+\cvsection{Honors \& Awards}
+\awardrow
+{\textbf{John Grado Graduate Fellowship,}\ Grado Department of ISE}
+{2026,}
+{Virginia Tech}
+
+% \awardrow
+% {\textbf{Nominated,}\ IISE Fellows Endowed Scholarship}
+% {2025,}
+% {Institute of Industrial and Systems Engineers}
+
+
+% \awardrow
+% {\textbf{Nominated,}\ John L. Imhoff Scholarship}
+% {2025,}
+% {Institute of Industrial and Systems Engineers}
+
+
+% \awardrow
+% {\textbf{Nominated,}\ Lisa Zaken Award for Excellence}
+% {2025,}
+% {Institute of Industrial and Systems Engineers}
+
+
+\awardrow
+{\textbf{Pratt Fellowship,}\ College of Engineering}
+{2025,}
+{Virginia Tech}
+
+
+\awardrow
+{\textbf{White GTA,}\ Grado Department of ISE}
+{2025,}
+{Virginia Tech}
+
+
+\awardrow
+{\textbf{Outstanding GTA,}\ Alpha Pi Mu Honor Society}
+{2025,}
+{Virginia Tech}
+
+
+\awardrow
+{\textbf{Best Researcher Award,}\ Data-Driven Optimization}
+{2024,}
+{ScienceFather}
+
+
+% \awardrow
+% {\textbf{Candidate,}\ Outstanding PhD Student of ISE}
+% {2023 and 2024,}
+% {Virginia Tech}
+
+
+% \awardrow
+% {\textbf{Candidate,}\ College of Engineering Outstanding Doctoral Student}
+% {2023 and 2024,}
+% {Virginia Tech}
+
+
+% \awardrow
+% {\textbf{Candidate,}\ Elite Student Researcher}
+% {2022,}
+% {University of Tehran}
+
+
+% \awardrow
+% {\textbf{Ranked 27th,}\ M.Sc. Entry Exam}
+% {2019,}
+% {Iran’s university entrance nationwide exam}
+
+
+% \awardrow
+% {\textbf{One of the Top 1\% Applicants,}\ B.Sc. Entry Exam}
+% {2015,}
+% {Iran’s university entrance examination}
+
+
+\awardrow
+{\textbf{Finalist,}\ Khwarizmi Youth Awards}
+{2014,}
+{Literature Section}
+
+
+\awardrow
+{\textbf{Finalist,}\ Khwarizmi Youth Awards}
+{2013,}
+{Mechatronics Section}
+
+
+% ============================================================
+% CERTIFICATIONS
+% ============================================================
+
+% \cvsection{Certifications}
+
+
+% \awardrow
+% {Data or Specimens Only Research}
+% {Spring 2024,}
+% {CITI Program}
+
+
+% \awardrow
+% {Conflicts of Interest}
+% {Spring 2024,}
+% {CITI Program}
+
+
+% \awardrow
+% {Biomedical Research}
+% {Fall 2023,}
+% {CITI Program}
+
+
+% \awardrow
+% {Social \& Behavioral Research}
+% {Fall 2023,}
+% {CITI Program}
+
+
+% \awardrow
+% {Basic Responsible Conduct of Research Course}
+% {Fall 2023,}
+% {CITI Program}
+
+
+% \awardrow
+% {Data Science for Industrial Engineering}
+% {Spring 2021,}
+% {Scientific Association of Industrial Engineering, UT}
+
+
+% \awardrow
+% {Machine Learning}
+% {Fall 2020,}
+% {Coursera}
+
+
+% \awardrow
+% {MATLAB Onramp}
+% {Fall 2020,}
+% {MathWorks}
+
+
+% \awardrow
+% {Introduction to programming using Python}
+% {Fall 2019,}
+% {Scientific Association of Industrial Engineering, SBUM}
+
+
+% \awardrow
+% {Practical Excel in Projects}
+% {Spring 2018,}
+% {Scientific Association of Industrial Engineering, SBUM}
+
+
+% \awardrow
+% {ISO 9001:2015}
+% {Fall 2017,}
+% {LL-C}
+
+
+% \awardrow
+% {HSE-MS}
+% {Fall 2017,}
+% {LL-C}
+
+
+% \awardrow
+% {Injection and Dressing}
+% {Spring 2017,}
+% {Iranian Nursing System Organization}
+
+
+% ============================================================
+% SKILLS
+% ============================================================
+
+% \cvsection{Skills}
+
+
+% \skillrow
+% {Linguistic:}
+% {Persian (Native);
+% English (Bilingual);
+% Kurdish (Intermediate);
+% Arabic (Intermediate)}
+
+
+% \skillrow
+% {Technical:}
+% {Linear, Non-linear, and Integer Programming;
+% Multi-Criteria Decision-Making;
+% Stochastic and Fuzzy Models;
+% Machine Learning.}
+
+
+% \skillrow
+% {Programming:}
+% {Python (Advanced);
+% MATLAB (Intermediate);
+% GAMS (Intermediate);
+% AMPL (Intermediate)}
+
+
+% \skillrow
+% {Personal \& Interpersonal:}
+% {Problem-Solving;
+% Emotional \& Social Intelligence;
+% Fast Learning;
+% Creative Thinking;
+% Teamwork;
+% Teaching}
+
+
+% ============================================================
+% CONFERENCES
+% ============================================================
+
+% ============================================================
+% PRESENTATIONS
+% ============================================================
+
+\cvsection{Presentations}
+
+\begin{cvcatlist}
+
+
+% ------------------------------------------------------------
+% Invited Talks
+% ------------------------------------------------------------
+
+\item \cvcategory{Invited Talks}
+
+\begin{cvconflist}
+
+\confitem
+{Data-Driven Portfolio Management for Motion Pictures Industry:
+A New Data-Driven Optimization Methodology Using a Large Language Model as an Expert}
+{ScholarsConnect, INFORMS OU Student Chapter, University of Oklahoma}
+{Online}
+{May 15, 2024}
+
+\end{cvconflist}
+
+
+% ------------------------------------------------------------
+% Conference Presentations
+% ------------------------------------------------------------
+
+\item \cvcategory{Conference Presentations}
+
+\begin{cvconflist}
+
+\confitem
+{Risk-Sensitive Reinforcement Learning with Smoothed Quantile Objectives}
+{INFORMS Annual Meeting}
+{San Francisco, CA, USA}
+{2026}
+
+\confitem
+{Optimistic Reinforcement Learning with Quantile Objectives}
+{The 29th International Conference on Artificial Intelligence and Statistics (AISTATS)}
+{Tangier, Morocco}
+{2026}
+
+\confitem
+{When Simpler is Safer: Reliability of Traditional Machine Learning vs. Large Language Models in Clinical Predictions}
+{INFORMS Annual Meeting}
+{Atlanta, GA, USA}
+{2025}
+
+\confitem
+{Augmented Numeric Rating Scale (ANRS): A New Personalized Pain Measurement Technique Benefiting from Multi-Attribute Decision-Making Techniques}
+{INFORMS Annual Meeting}
+{Seattle, WA, USA}
+{2024}
+
+\confitem
+{Data-Driven Portfolio Management for Motion Pictures Industry:
+A New Data-Driven Optimization Methodology Using a Large Language Model as an Expert}
+{INFORMS Annual Meeting}
+{Phoenix, AZ, USA}
+{2023}
+
+\confitem
+{Application of Multi-Criteria Decision-Making Methods for Human Resource's Task Scheduling in Multi-Sided Platforms}
+{6th European Conference on IEOM}
+{Lisbon, Portugal}
+{2023}
+
+\confitem
+{A New Application of Coordination Contracts for Supplier Selection in a Cloud Environment}
+{IFIP International Conference}
+{Novi Sad, Serbia}
+{2020}
+
+\end{cvconflist}
+
+
+\end{cvcatlist}
+
+
+% ============================================================
+% EXPERIENCE
+% ============================================================
+
+\cvsection{Experience}
+
+\experienceentry
+{Applied Scientist Intern}
+{Sep. 2026 - Present}
+{Amazon}
+{Seattle, WA, USA}
+{\textbf{Research:} Risk-Sensitive Agentic AI}
+
+\experienceentry
+{Instructor}
+{Fall 2024; Summer 2026}
+{Virginia Tech}
+{Blacksburg, VA, USA}
+{\textbf{Courses:} Introduction to Industrial and Systems Engineering,
+Deterministic Operations Research}
+
+\experienceentry
+{Graduate Research Assistant}
+{Spring 2023 - Present}
+{Virginia Tech}
+{Blacksburg, VA, USA}
+{\textbf{Research Areas:} Reinforcement Learning,
+Data-Driven Optimization, Healthcare Decision-Making}
+
+\experienceentry
+{Graduate Teaching Assistant}
+{Spring 2023 - Spring 2026}
+{Virginia Tech}
+{Blacksburg, VA, USA}
+{\textbf{Courses:} Deterministic Operations Research, Optimization I,
+Simulation I, Data Management for ISE, Intro to ISE,
+Manufacturing Process Lab}
+
+\experienceentry
+{Graduate Research Assistant}
+{Fall 2020 - Spring 2023}
+{University of Tehran}
+{Tehran, Iran}
+{\textbf{Research Areas:} Supply Chain Management,
+Data-Driven Queuing Systems, Coordination Contracts}
+
+\experienceentry
+{Instructor}
+{Summer 2022}
+{Shahid Beheshti University of Medical Sciences}
+{Tehran, Iran}
+{\textbf{Course:} Deterministic Operations Research}
+
+\experienceentry
+{Graduate Teaching Assistant}
+{Fall 2020 - Spring 2022}
+{University of Tehran}
+{Tehran, Iran}
+{\textbf{Courses:} Scheduling Theory, Queuing Systems,
+Design of Industrial Systems, Advanced Engineering Economics}
+
+\experienceentry
+{Industrial Engineering Intern}
+{Apr. 2019 - Aug. 2019}
+{Loghman Hakim Hospital}
+{Tehran, Iran}
+{\textbf{Project:} Review and modification of the health, safety, and environment system}
+
+\experienceentry
+{Industrial Engineering Intern}
+{Jul. 2018 - Oct. 2018}
+{Cylinder Persia}
+{Tehran, Iran}
+{\textbf{Project:} Analysis and improvement of organizational processes}
+
+% ============================================================
+% VOLUNTEERING ACTIVITIES
+% ============================================================
+
+\cvsection{Volunteering Activities}
+
+\begin{cvcatlist}
+
+
+% ------------------------------------------------------------
+% Academic
+% ------------------------------------------------------------
+
+\item \cvcategory{Academic}
+
+\servicerow
+{\textbf{President}\ of INFORMS Student Chapter (Magna Cum Laude)}
+{Fall 2025 - Fall 2026,}
+{Virginia Tech}
+
+\servicerow
+{\textbf{Vice President}\ of INFORMS Student Chapter}
+{Spring 2024 - Spring 2025,}
+{Virginia Tech}
+
+\servicerow
+{\textbf{Graduate Student Representative}\ at VT ISE Advisory Board}
+{Fall 2023 - Spring 2024,}
+{Virginia Tech}
+
+\servicerow
+{\textbf{Reviewer,}\ Various Journals}
+{Since Fall 2021,}
+{Elsevier and Springer}
+
+\servicerow
+{\textbf{Member of the Board of Advisors}, Scientific Association of IE}
+{Fall 2017 - Spring 2019,}
+{SBUM}
+
+
+% ------------------------------------------------------------
+% Cultural
+% ------------------------------------------------------------
+
+\item \cvcategory{Cultural}
+
+\servicerow
+{\textbf{Vice President}, Iranian Society of Virginia Tech (ISVT)}
+{Fall 2023 - Fall 2024,}
+{Virginia Tech}
+
+\servicerow
+{\textbf{Vice President}, Literature Association}
+{Fall 2016 - Spring 2019,}
+{SBUM}
+
+\servicerow
+{\textbf{Vice President}, Homay Rahmat Charity Institution}
+{Fall 2016 - Spring 2019,}
+{SBUM}
+
+\servicerow
+{\textbf{Live Shows Host}}
+{Fall 2016 - Spring 2019,}
+{SBUM}
+
+\servicerow
+{\textbf{Directing Manager}, 13 Cultural Centers of the IE Faculty}
+{Fall 2015 - Spring 2019,}
+{SBUM}
+
+\servicerow
+{\textbf{Editor-in-Chief}, Farhang Beheshti Cultural Magazine}
+{Spring 2018 - Spring 2019,}
+{SBUM}
+
+\servicerow
+{\textbf{Founder and Judge}, Beheshti's Got Talent}
+{Spring 2018,}
+{SBUM}
+
+\servicerow
+{\textbf{Founder and Senior Manager}, Zaraban Omid Charity Bazaar}
+{Fall 2017,}
+{SBUM}
+
+
+\end{cvcatlist}
+
+
+% ============================================================
+% REFERENCES
+% ============================================================
+
+\cvsection{References}
+
+
+\noindent
+\begin{tabularx}
+{\textwidth}
+{@{\hspace{0.075in}}X X@{}}
+
+
+{\BodyFont\color{CVText}
+\textbf{Prof. K.L. Tsui:}\ kwok.tsui@uta.edu}
+&
+{\BodyFont\color{CVText}
+\textbf{Dr. S. Khodadadian:}\ sajadk@vt.edu}
+\\[-0.4pt]
+
+
+{\BodyFont\color{CVText}
+\textbf{Prof. E. Büyüktahtakın:}\ esratoy@vt.edu}
+&
+{\BodyFont\color{CVText}
+\textbf{Dr. H. Zhong:}\ hzhong@vt.edu}
+\\[-0.4pt]
+
+
+% {\BodyFont\color{CVText}
+% \textbf{Prof. F. Jolai:}\ fjolai@ut.ac.ir}
+% &
+% {\BodyFont\color{CVText}
+% \textbf{Prof. K. Rezaie:}\ krezaie@ut.ac.ir;
+% kamran.rezaie@pniran.com}
+% \\[-0.4pt]
+
+
+% {\BodyFont\color{CVText}
+% \textbf{Prof. M. Rabbani:}\ mrabani@ut.ac.ir}
+% &
+% {\BodyFont\color{CVText}
+% \textbf{Dr. A. Aghsami:}\ a.aghsami@ut.ac.ir}
+
+
+\end{tabularx}
+
+
+\end{document}
