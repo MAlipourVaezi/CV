@@ -73,7 +73,8 @@ jobs:
             texlive-xetex \
             texlive-latex-extra \
             texlive-fonts-recommended \
-            fonts-croscore
+            fonts-croscore \
+            poppler-utils
           fc-cache -f
 
       - name: Compile CV
@@ -101,6 +102,42 @@ jobs:
           </body>
           </html>
           EOF
+
+      - name: Create embeddable CV preview
+        run: |
+          pdftoppm -png -scale-to 2400 published/cv.pdf published/cv-page
+          cat > published/preview.html <<'EOF'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Curriculum Vitae</title>
+            <style>
+              * { box-sizing: border-box; }
+              body { margin: 0; background: #fff; color: #222; font: 14px Arial, sans-serif; }
+              header { padding: 12px 16px; border-bottom: 1px solid #ddd; text-align: right; }
+              a { color: #186451; }
+              main { max-width: 1000px; margin: 0 auto; }
+              figure { margin: 0 0 12px; aspect-ratio: 210 / 297; }
+              img { display: block; width: 100%; height: auto; }
+            </style>
+          </head>
+          <body>
+            <header><a href="cv.pdf" target="_blank" rel="noopener">Open PDF</a></header>
+            <main aria-label="Curriculum Vitae">
+          EOF
+
+          PAGE_NUMBER=0
+          while IFS= read -r PAGE_IMAGE; do
+            PAGE_NUMBER=$((PAGE_NUMBER + 1))
+            LOADING="lazy"
+            if [ "$PAGE_NUMBER" -eq 1 ]; then LOADING="eager"; fi
+            printf '<figure><img src="%s" alt="Curriculum Vitae, page %s" loading="%s"></figure>\n' \
+              "$PAGE_IMAGE" "$PAGE_NUMBER" "$LOADING" >> published/preview.html
+          done < <(find published -maxdepth 1 -name 'cv-page-*.png' -printf '%f\n' | sort -V)
+          test "$PAGE_NUMBER" -gt 0
+          printf '</main></body></html>\n' >> published/preview.html
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v4
