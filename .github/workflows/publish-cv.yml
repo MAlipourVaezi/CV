@@ -1,0 +1,163 @@
+name: Publish CV
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "**.tex"
+      - ".github/workflows/publish-cv.yml"
+  schedule:
+    # Check Overleaf twice per hour.
+    - cron: "7,37 * * * *"
+
+permissions:
+  contents: read
+
+env:
+  ROOT_TEX: CV.tex
+  PUBLIC_REPO: MAlipourVaezi/cv-public
+  OVERLEAF_PROJECT_ID: ${{ secrets.OVERLEAF_PROJECT_ID }}
+  OVERLEAF_GIT_TOKEN: ${{ secrets.OVERLEAF_GIT_TOKEN }}
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out GitHub source
+        uses: actions/checkout@v5
+        with:
+          path: source
+
+      - name: Pull latest Overleaf project when configured
+        if: ${{ env.OVERLEAF_PROJECT_ID != '' && env.OVERLEAF_GIT_TOKEN != '' }}
+        env:
+          OVERLEAF_TOKEN: ${{ secrets.OVERLEAF_GIT_TOKEN }}
+        run: |
+          rm -rf source
+
+          cat > /tmp/overleaf-askpass.sh <<'EOF'
+          #!/bin/sh
+          case "$1" in
+            *sername*)
+              printf '%s\n' "git"
+              ;;
+            *assword*)
+              printf '%s\n' "$OVERLEAF_TOKEN"
+              ;;
+          esac
+          EOF
+
+          chmod 700 /tmp/overleaf-askpass.sh
+
+          GIT_ASKPASS=/tmp/overleaf-askpass.sh \
+          GIT_TERMINAL_PROMPT=0 \
+          git clone --depth=1 \
+            "https://git.overleaf.com/${OVERLEAF_PROJECT_ID}" \
+            source
+
+          rm -f /tmp/overleaf-askpass.sh
+
+      - name: Note when Overleaf polling is not configured
+        if: ${{ env.OVERLEAF_PROJECT_ID == '' || env.OVERLEAF_GIT_TOKEN == '' }}
+        run: |
+          echo "OVERLEAF_PROJECT_ID and/or OVERLEAF_GIT_TOKEN are not set."
+          echo "Using the source already committed to this GitHub repository."
+
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            latexmk \
+            texlive-xetex \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            fonts-croscore
+          fc-cache -f
+
+      - name: Compile CV
+        run: |
+          cd source
+          latexmk \
+            -xelatex \
+            -interaction=nonstopmode \
+            -halt-on-error \
+            "$ROOT_TEX"
+
+          PDF_FILE="${ROOT_TEX%.tex}.pdf"
+          test -f "$PDF_FILE"
+
+      - name: Require public repository token
+        env:
+          PUBLISH_TOKEN: ${{ secrets.CV_PUBLIC_REPO_TOKEN }}
+        run: |
+          if [ -z "$PUBLISH_TOKEN" ]; then
+            echo "Missing CV_PUBLIC_REPO_TOKEN. Create a fine-grained token with Contents: Read and write for ${PUBLIC_REPO}, then add it as an Actions secret in this private source repository."
+            exit 1
+          fi
+
+      - name: Clone public PDF repository
+        env:
+          PUBLISH_TOKEN: ${{ secrets.CV_PUBLIC_REPO_TOKEN }}
+        run: |
+          cat > /tmp/github-askpass.sh <<'EOF'
+          #!/bin/sh
+          case "$1" in
+            *sername*)
+              printf '%s\n' "x-access-token"
+              ;;
+            *assword*)
+              printf '%s\n' "$PUBLISH_TOKEN"
+              ;;
+          esac
+          EOF
+
+          chmod 700 /tmp/github-askpass.sh
+
+          GIT_ASKPASS=/tmp/github-askpass.sh \
+          GIT_TERMINAL_PROMPT=0 \
+          git clone \
+            "https://github.com/${PUBLIC_REPO}.git" \
+            public
+
+          rm -f /tmp/github-askpass.sh
+
+      - name: Update public files
+        run: |
+          PDF_FILE="${ROOT_TEX%.tex}.pdf"
+          cp "source/${PDF_FILE}" public/cv.pdf
+
+          touch public/.nojekyll
+
+          cat > public/index.html <<'EOF'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Curriculum Vitae</title>
+            <meta http-equiv="refresh" content="0; url=cv.pdf">
+          </head>
+          <body>
+            <p><a href="cv.pdf">Open Curriculum Vitae</a></p>
+          </body>
+          </html>
+          EOF
+
+      - name: Publish updated CV
+        run: |
+          cd public
+          git config user.name "CV Publisher"
+          git config user.email "actions@github.com"
+
+          git add cv.pdf index.html .nojekyll
+
+          if git diff --cached --quiet; then
+            echo "CV has not changed."
+            exit 0
+          fi
+
+          git commit -m "Update CV"
+          git push origin main
