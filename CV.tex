@@ -263,17 +263,18 @@
 % deliberately compact to avoid unnecessary vertical gaps
 % between individual projects/publications.
 \newenvironment{cvsublist}{%
-    \begin{itemize}[
+    \begin{enumerate}[
         leftmargin=0.24in,
-        labelsep=0.07in,
-        label={\BodyFont\textbullet},
+        labelsep=0.04in,
+        label={\BodyFont\color{CVBody}\arabic*.},
+        start=1,
         topsep=-0.8pt,
         itemsep=-0.8pt,
         parsep=0pt,
         partopsep=0pt
     ]
 }{%
-    \end{itemize}
+    \end{enumerate}
 }
 
 % ============================================================
@@ -281,17 +282,18 @@
 % ============================================================
 
 \newenvironment{cvconflist}{%
-    \begin{itemize}[
+    \begin{enumerate}[
         leftmargin=0.24in,
-        labelsep=0.07in,
-        label={\BodyFont\textbullet},
+        labelsep=0.04in,
+        label={\BodyFont\color{CVBody}\arabic*.},
+        start=1,
         topsep=-0.8pt,
         itemsep=-0.8pt,
         parsep=0pt,
         partopsep=0pt
     ]
 }{%
-    \end{itemize}
+    \end{enumerate}
 }
 
 \newcommand{\confitem}[4]{%
@@ -404,8 +406,8 @@ Blacksburg, VA 24061, USA}
 
 (540) 605-0045
 \;|\;
-\href{mailto:Alipouraezi@vt.edu}
-{Alipouraezi@vt.edu}
+\href{mailto:Alipourvaezi@vt.edu}
+{Alipourvaezi@vt.edu}
 \;|\;
 \href
 {https://www.linkedin.com/in/mohammad-alipour-vaezi-777616193}
@@ -1462,7 +1464,7 @@ Design of Industrial Systems, Advanced Engineering Economics}
 \item \cvcategory{Academic}
 
 \servicerow
-{\textbf{President}\ of INFORMS Student Chapter (Magna Cum Laude)}
+{\textbf{President}\ of INFORMS Student Chapter (Magna Cum Laude Recognition)}
 {Fall 2025 - Fall 2026,}
 {Virginia Tech}
 
